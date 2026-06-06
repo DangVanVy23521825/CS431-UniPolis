@@ -1,0 +1,29 @@
+{
+  "split_info": {
+    "total_pairs": 4014,
+    "train": 2787,
+    "val": 616,
+    "test": 611,
+    "source": "training_data_pldc",
+    "eval_samples": 30,
+    "top_k": 5,
+    "intent_distribution": {
+      "relational": 14,
+      "factual": 10,
+      "applicative": 6
+    }
+  },
+  "summaries": [
+    {
+      "model": "v2_hard_negative",
+      "model_path": "/Users/dangvanvy/UniPolis/bi-encoder-finetuned/models/bi_encoder_hnm_v2/vietnamese-bi-encoder-v2-hnm",
+      "encode_seconds": 10.076758041992434,
+      "queries": 30,
+      "corpus": 442,
+      "faithfulness": 0.9444444444444445,
+      "answer_relevancy": NaN,
+      "context_precision": 0.8255555554813516,
+      "context_recall": 0.9933333333333334
+    }
+  ]
+}

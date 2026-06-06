@@ -1,0 +1,76 @@
+{
+  "split": {
+    "total_pairs": 4014,
+    "train": 2787,
+    "val": 616,
+    "test": 611,
+    "test_intents": {
+      "relational": 212,
+      "factual": 191,
+      "applicative": 208
+    },
+    "split_unit": "(source, chapter)"
+  },
+  "results": [
+    {
+      "model": "base_vietnamese_bi_encoder",
+      "model_path": "bkai-foundation-models/vietnamese-bi-encoder",
+      "queries": 611,
+      "corpus": 212,
+      "recall@1": 0.6530278232405892,
+      "recall@5": 0.9050736497545008,
+      "recall@10": 0.9492635024549918,
+      "mrr@10": 0.7602960278492193,
+      "encode_seconds": 21.345407332999457,
+      "search_seconds": 0.14664841600097134,
+      "seconds_per_query_search": 0.00024001377414234262,
+      "delta_mrr@10_vs_base": 0.0,
+      "relative_mrr@10_vs_base": 0.0
+    },
+    {
+      "model": "bge_m3",
+      "model_path": "BAAI/bge-m3",
+      "queries": 611,
+      "corpus": 212,
+      "recall@1": 0.8052373158756138,
+      "recall@5": 0.967266775777414,
+      "recall@10": 0.9901800327332242,
+      "mrr@10": 0.872950276673681,
+      "encode_seconds": 83.6819579160001,
+      "search_seconds": 0.016355374998966,
+      "seconds_per_query_search": 2.6768207854281504e-05,
+      "delta_mrr@10_vs_base": 0.11265424882446162,
+      "relative_mrr@10_vs_base": 0.1481715604159424
+    },
+    {
+      "model": "e5_large",
+      "model_path": "intfloat/multilingual-e5-large",
+      "queries": 611,
+      "corpus": 212,
+      "recall@1": 0.7970540098199672,
+      "recall@5": 0.9574468085106383,
+      "recall@10": 0.9869067103109657,
+      "mrr@10": 0.8655223027563453,
+      "encode_seconds": 74.27479237499938,
+      "search_seconds": 0.1681375419975666,
+      "seconds_per_query_search": 0.00027518419312204026,
+      "delta_mrr@10_vs_base": 0.105226274907126,
+      "relative_mrr@10_vs_base": 0.13840171598002127
+    },
+    {
+      "model": "v2_hard_negative",
+      "model_path": "/Users/dangvanvy/UniPolis/bi-encoder-finetuned/models/bi_encoder_hnm_v2/vietnamese-bi-encoder-v2-hnm",
+      "queries": 611,
+      "corpus": 212,
+      "recall@1": 0.7675941080196399,
+      "recall@5": 0.9525368248772504,
+      "recall@10": 0.9738134206219312,
+      "mrr@10": 0.8442775309796586,
+      "encode_seconds": 23.80901074999929,
+      "search_seconds": 0.1321269170002779,
+      "seconds_per_query_search": 0.00021624700000045483,
+      "delta_mrr@10_vs_base": 0.08398150313043928,
+      "relative_mrr@10_vs_base": 0.11045895290024368
+    }
+  ]
+}

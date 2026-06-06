@@ -1,0 +1,74 @@
+{
+  "eval_config": {
+    "source": "training_data_pldc",
+    "eval_samples": 30,
+    "top_k": 5,
+    "seed": 42,
+    "llm_model": "gemini-3.1-flash-lite",
+    "ragas_metrics": [
+      "faithfulness",
+      "answer_relevancy",
+      "context_precision",
+      "context_recall"
+    ],
+    "note": "Base metrics from first full run; V2 from retry run (2026-03). answer_relevancy NaN on both due to gemini-3.1-flash-lite + RAGAS compatibility."
+  },
+  "split_info": {
+    "total_pairs": 4014,
+    "train": 2787,
+    "val": 616,
+    "test": 611,
+    "source": "training_data_pldc",
+    "eval_samples": 30,
+    "top_k": 5,
+    "intent_distribution": {
+      "relational": 14,
+      "factual": 10,
+      "applicative": 6
+    },
+    "split_unit": "(source, chapter)"
+  },
+  "summaries": [
+    {
+      "model": "base_vietnamese_bi_encoder",
+      "model_path": "bkai-foundation-models/vietnamese-bi-encoder",
+      "encode_seconds": 9.532086708997667,
+      "queries": 30,
+      "corpus": 442,
+      "faithfulness": 0.9598214285714286,
+      "answer_relevancy": 0.95,
+      "context_precision": 0.7844444443767313,
+      "context_recall": 0.9016666666666667,
+      "delta_vs_base": {
+        "faithfulness": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      "answer_relevancy_source": "manual"
+    },
+    {
+      "model": "v2_hard_negative",
+      "model_path": "/Users/dangvanvy/UniPolis/bi-encoder-finetuned/models/bi_encoder_hnm_v2/vietnamese-bi-encoder-v2-hnm",
+      "encode_seconds": 10.076758041992434,
+      "queries": 30,
+      "corpus": 442,
+      "faithfulness": 0.9444444444444445,
+      "answer_relevancy": 0.9833333333333333,
+      "context_precision": 0.8255555554813516,
+      "context_recall": 0.9933333333333334,
+      "delta_vs_base": {
+        "faithfulness": -0.0153769841279841,
+        "context_precision": 0.0411111111046203,
+        "context_recall": 0.0916666666666667
+      },
+      "answer_relevancy_source": "manual"
+    }
+  ],
+  "artifact_files": {
+    "base_generated": "base_vietnamese_bi_encoder_generated_records.jsonl",
+    "base_records": "base_vietnamese_bi_encoder_records.jsonl",
+    "v2_generated": "v2_hard_negative_generated_records.jsonl",
+    "v2_records": "v2_hard_negative_records.jsonl"
+  },
+  "note": "answer_relevancy filled by manual scoring."
+}

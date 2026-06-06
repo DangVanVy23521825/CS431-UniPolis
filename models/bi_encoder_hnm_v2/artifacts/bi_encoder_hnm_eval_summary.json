@@ -1,0 +1,111 @@
+{
+  "summary": [
+    {
+      "model": "base",
+      "val_mrr@10": 0.42341269841269846,
+      "test_mrr@10": 0.4177785571402597
+    },
+    {
+      "model": "v1_mnrl",
+      "val_mrr@10": 0.4657989332096476,
+      "test_mrr@10": 0.4794780869248957
+    },
+    {
+      "model": "v2_hard_negative",
+      "val_mrr@10": 0.4863546176046177,
+      "test_mrr@10": 0.4982490322915853
+    }
+  ],
+  "metrics": {
+    "base_val": {
+      "base_val_val_cosine_accuracy@1": 0.21915584415584416,
+      "base_val_val_cosine_accuracy@3": 0.6217532467532467,
+      "base_val_val_cosine_accuracy@5": 0.711038961038961,
+      "base_val_val_cosine_accuracy@10": 0.8116883116883117,
+      "base_val_val_cosine_precision@1": 0.21915584415584416,
+      "base_val_val_cosine_precision@5": 0.1422077922077922,
+      "base_val_val_cosine_precision@10": 0.08116883116883117,
+      "base_val_val_cosine_recall@1": 0.21915584415584416,
+      "base_val_val_cosine_recall@5": 0.711038961038961,
+      "base_val_val_cosine_recall@10": 0.8116883116883117,
+      "base_val_val_cosine_ndcg@10": 0.5183946618992343,
+      "base_val_val_cosine_mrr@10": 0.42341269841269846,
+      "base_val_val_cosine_map@100": 0.43133585739064983
+    },
+    "base_test": {
+      "base_test_test_cosine_accuracy@1": 0.20949263502454993,
+      "base_test_test_cosine_accuracy@3": 0.6284779050736498,
+      "base_test_test_cosine_accuracy@5": 0.7283142389525368,
+      "base_test_test_cosine_accuracy@10": 0.8281505728314239,
+      "base_test_test_cosine_precision@1": 0.20949263502454993,
+      "base_test_test_cosine_precision@5": 0.14566284779050734,
+      "base_test_test_cosine_precision@10": 0.08281505728314238,
+      "base_test_test_cosine_recall@1": 0.20949263502454993,
+      "base_test_test_cosine_recall@5": 0.7283142389525368,
+      "base_test_test_cosine_recall@10": 0.8281505728314239,
+      "base_test_test_cosine_ndcg@10": 0.5180452784107277,
+      "base_test_test_cosine_mrr@10": 0.4177785571402597,
+      "base_test_test_cosine_map@100": 0.4250925969065012
+    },
+    "v1_val": {
+      "v1_val_val_cosine_accuracy@1": 0.22727272727272727,
+      "v1_val_val_cosine_accuracy@3": 0.7175324675324676,
+      "v1_val_val_cosine_accuracy@5": 0.8068181818181818,
+      "v1_val_val_cosine_accuracy@10": 0.8993506493506493,
+      "v1_val_val_cosine_precision@1": 0.22727272727272727,
+      "v1_val_val_cosine_precision@5": 0.16136363636363632,
+      "v1_val_val_cosine_precision@10": 0.08993506493506492,
+      "v1_val_val_cosine_recall@1": 0.22727272727272727,
+      "v1_val_val_cosine_recall@5": 0.8068181818181818,
+      "v1_val_val_cosine_recall@10": 0.8993506493506493,
+      "v1_val_val_cosine_ndcg@10": 0.5725192371183673,
+      "v1_val_val_cosine_mrr@10": 0.4657989332096476,
+      "v1_val_val_cosine_map@100": 0.4710807335385342
+    },
+    "v1_test": {
+      "v1_test_test_cosine_accuracy@1": 0.23731587561374795,
+      "v1_test_test_cosine_accuracy@3": 0.7430441898527005,
+      "v1_test_test_cosine_accuracy@5": 0.806873977086743,
+      "v1_test_test_cosine_accuracy@10": 0.9099836333878887,
+      "v1_test_test_cosine_precision@1": 0.23731587561374795,
+      "v1_test_test_cosine_precision@5": 0.1613747954173486,
+      "v1_test_test_cosine_precision@10": 0.09099836333878886,
+      "v1_test_test_cosine_recall@1": 0.23731587561374795,
+      "v1_test_test_cosine_recall@5": 0.806873977086743,
+      "v1_test_test_cosine_recall@10": 0.9099836333878887,
+      "v1_test_test_cosine_ndcg@10": 0.5854355121605241,
+      "v1_test_test_cosine_mrr@10": 0.4794780869248957,
+      "v1_test_test_cosine_map@100": 0.48323287529433706
+    },
+    "v2_val": {
+      "v2_val_val_cosine_accuracy@1": 0.25162337662337664,
+      "v2_val_val_cosine_accuracy@3": 0.7272727272727273,
+      "v2_val_val_cosine_accuracy@5": 0.8116883116883117,
+      "v2_val_val_cosine_accuracy@10": 0.9090909090909091,
+      "v2_val_val_cosine_precision@1": 0.25162337662337664,
+      "v2_val_val_cosine_precision@5": 0.16233766233766234,
+      "v2_val_val_cosine_precision@10": 0.0909090909090909,
+      "v2_val_val_cosine_recall@1": 0.25162337662337664,
+      "v2_val_val_cosine_recall@5": 0.8116883116883117,
+      "v2_val_val_cosine_recall@10": 0.9090909090909091,
+      "v2_val_val_cosine_ndcg@10": 0.590408964640149,
+      "v2_val_val_cosine_mrr@10": 0.4863546176046177,
+      "v2_val_val_cosine_map@100": 0.49131095029030125
+    },
+    "v2_test": {
+      "v2_test_test_cosine_accuracy@1": 0.2602291325695581,
+      "v2_test_test_cosine_accuracy@3": 0.7594108019639935,
+      "v2_test_test_cosine_accuracy@5": 0.8248772504091653,
+      "v2_test_test_cosine_accuracy@10": 0.9018003273322422,
+      "v2_test_test_cosine_precision@1": 0.2602291325695581,
+      "v2_test_test_cosine_precision@5": 0.16497545008183304,
+      "v2_test_test_cosine_precision@10": 0.09018003273322421,
+      "v2_test_test_cosine_recall@1": 0.2602291325695581,
+      "v2_test_test_cosine_recall@5": 0.8248772504091653,
+      "v2_test_test_cosine_recall@10": 0.9018003273322422,
+      "v2_test_test_cosine_ndcg@10": 0.598149014001918,
+      "v2_test_test_cosine_mrr@10": 0.4982490322915853,
+      "v2_test_test_cosine_map@100": 0.5028724411890975
+    }
+  }
+}

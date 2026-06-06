@@ -1,0 +1,4 @@
+model,val_mrr@10,test_mrr@10,test_delta_base
+base,0.423413,0.417779,0.000000
+v1_mnrl,0.465799,0.479478,0.061700
+v2_hard_negative,0.486355,0.498249,0.080470

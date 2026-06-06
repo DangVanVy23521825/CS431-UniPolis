@@ -1,0 +1,33 @@
+{
+  "base_model": "bkai-foundation-models/vietnamese-bi-encoder",
+  "audit_files": [
+    "/kaggle/input/datasets/dangvy1507/training-data/training_data_lsd/qa_audit.jsonl",
+    "/kaggle/input/datasets/dangvy1507/training-data/training_data_pldc/qa_audit.jsonl",
+    "/kaggle/input/datasets/dangvy1507/training-data/training_data_th/qa_audit.jsonl"
+  ],
+  "split": {
+    "train_pairs": 2787,
+    "val_pairs": 616,
+    "test_pairs": 611,
+    "split_unit": "(source, chapter)"
+  },
+  "stage_1": {
+    "epochs": 3,
+    "lr": 1e-05,
+    "loss": "MultipleNegativesRankingLoss"
+  },
+  "stage_2": {
+    "epochs": 2,
+    "lr": 5e-06,
+    "loss": "MultipleNegativesRankingLoss with mined hard negatives",
+    "mine_top_k": 30
+  },
+  "mrr@10": {
+    "base_val": 0.42341269841269846,
+    "base_test": 0.4177785571402597,
+    "v1_val": 0.4657989332096476,
+    "v1_test": 0.4794780869248957,
+    "v2_val": 0.4863546176046177,
+    "v2_test": 0.4982490322915853
+  }
+}

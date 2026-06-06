@@ -1,0 +1,3 @@
+model,model_path,queries,corpus,encode_seconds,faithfulness,answer_relevancy,context_precision,context_recall,delta_faithfulness_vs_base,delta_context_precision_vs_base,delta_context_recall_vs_base,answer_relevancy_source
+base_vietnamese_bi_encoder,bkai-foundation-models/vietnamese-bi-encoder,30,442,9.532087,0.959821,0.950000,0.784444,0.901667,0.000000,0.000000,0.000000,manual
+v2_hard_negative,/Users/dangvanvy/UniPolis/bi-encoder-finetuned/models/bi_encoder_hnm_v2/vietnamese-bi-encoder-v2-hnm,30,442,10.076758,0.944444,0.983333,0.825556,0.993333,-0.015377,0.041111,0.091667,manual

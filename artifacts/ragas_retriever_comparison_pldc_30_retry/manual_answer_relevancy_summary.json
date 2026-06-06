@@ -1,0 +1,16 @@
+{
+  "summaries": [
+    {
+      "model": "base_vietnamese_bi_encoder",
+      "n_scored": 30,
+      "answer_relevancy_manual": 0.95
+    },
+    {
+      "model": "v2_hard_negative",
+      "n_scored": 30,
+      "answer_relevancy_manual": 0.9833333333333333
+    }
+  ],
+  "scorer": "assistant_manual_review",
+  "rubric": "0/0.5/1 theo question-answer focus"
+}

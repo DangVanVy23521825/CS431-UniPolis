@@ -1,0 +1,2 @@
+answer_relevancy,context_precision,context_recall,corpus,encode_seconds,faithfulness,model,model_path,queries
+nan,0.8255555554813516,0.9933333333333334,442,10.076758041992434,0.9444444444444445,v2_hard_negative,/Users/dangvanvy/UniPolis/bi-encoder-finetuned/models/bi_encoder_hnm_v2/vietnamese-bi-encoder-v2-hnm,30
