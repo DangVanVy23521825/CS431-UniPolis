@@ -1,34 +1,19 @@
-# Core ML / Embeddings
+# Core ML / Embeddings (fine-tune + benchmark)
 torch>=2.0.0
 numpy<2.0
 sentence-transformers==3.3.1
 transformers
 accelerate
+datasets
 
-# LangChain ecosystem
-langchain
-langchain-community
-langchain-openai
-langchain-chroma
+# RAGAS evaluation
+ragas==0.2.14
 langchain-google-genai
-langchain-text-splitters
+langchain-community==0.3.27
+langchain-core==0.3.65
 
-# Vector / Retrieval
-chromadb
-rank-bm25
-
-# PDF
+# PDF (data generation / instruction data)
 PyMuPDF
-
-# Vietnamese NLP
-underthesea
-
-# LLM providers
-openai
-tiktoken
-
-# UI
-streamlit
 
 # Utilities
 python-dotenv

@@ -35,6 +35,6 @@ UNIPOLIS_VI_BI_ENCODER_PATH=/absolute/path/to/vietnamese-bi-encoder-v2-hnm
 - `bi_encoder_hnm_v2/training_metadata.json` — cấu hình split, hyperparameter, MRR@10
 - `bi_encoder_hnm_v2/artifacts/bi_encoder_hnm_eval_summary.json` — so sánh base / V1 / V2
 
-### Dùng trong demo
+### Dùng trong demo (teammate)
 
-Sau khi có model + Chroma build bằng cùng embedding, chọn pipeline **Quality · VN Bi-Encoder (FT)** trên Streamlit.
+Sau khi teammate tích hợp demo: đặt model tại path trên, build Chroma bằng **cùng embedding V2**. Xem [demo/README.md](../demo/README.md).
