@@ -26,18 +26,18 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 load_dotenv()
 
 _REPO_ROOT = Path(__file__).resolve().parent
-_DEFAULT_VI_BI_ENCODER_DIR = _REPO_ROOT / "models" / "vietnamese-bi-encoder-finetuned"
-_DOWNLOADED_VI_BI_ENCODER_DIR = (
+_VI_BI_ENCODER_CANDIDATES = (
+    _REPO_ROOT / "models" / "vietnamese-bi-encoder-v2-hnm",
+    _REPO_ROOT / "models" / "bi_encoder_hnm_v2" / "vietnamese-bi-encoder-v2-hnm",
+    _REPO_ROOT / "models" / "vietnamese-bi-encoder-finetuned",
     _REPO_ROOT
     / "bi-encoder-finetuned"
     / "models"
     / "bi_encoder_hnm_v2"
-    / "vietnamese-bi-encoder-v2-hnm"
+    / "vietnamese-bi-encoder-v2-hnm",
 )
 _DEFAULT_VI_BI_ENCODER = str(
-    _DEFAULT_VI_BI_ENCODER_DIR
-    if _DEFAULT_VI_BI_ENCODER_DIR.exists()
-    else _DOWNLOADED_VI_BI_ENCODER_DIR
+    next((p for p in _VI_BI_ENCODER_CANDIDATES if p.exists()), _VI_BI_ENCODER_CANDIDATES[0])
 )
 
 # ── System prompt ────────────────────────────────────────────────────────────

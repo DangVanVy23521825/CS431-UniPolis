@@ -11,7 +11,7 @@ from typing import List, Optional
 import streamlit as st
 from langchain_core.documents import Document
 
-from config import PIPELINE_MODES, PRESET_QUESTIONS, SUBJECT_CATALOGUE
+from config import DEMO_PIPELINE, PRESET_QUESTIONS, SUBJECT_CATALOGUE
 from utils import compute_confidence, format_elapsed
 
 
@@ -51,20 +51,36 @@ def render_hero(subject: str, cfg: dict) -> None:
 
 
 # ── Status bar ─────────────────────────────────────────────────────────────────
-def render_status_bar(subject: str, pipeline_mode: str, top_k: int) -> None:
+def render_status_bar(subject: str, top_k: int) -> None:
     """Hiển thị thanh trạng thái cấu hình hiện tại bên trên khung chat."""
     subject_cfg = SUBJECT_CATALOGUE.get(subject, {})
     icon = subject_cfg.get("icon", "📖")
-    mode_cfg = PIPELINE_MODES.get(pipeline_mode, {})
-    mode_desc = mode_cfg.get("desc", pipeline_mode)
+    pipeline_label = DEMO_PIPELINE["label"]
+    pipeline_desc = DEMO_PIPELINE["desc"]
 
     st.markdown(
         f"""
         <div class="status-bar">
           <span class="status-chip">{icon} {subject}</span>
-          <span class="status-chip">🚀 {pipeline_mode}</span>
+          <span class="status-chip">🚀 {pipeline_label}</span>
           <span class="status-chip">🔍 Top-{top_k}</span>
-          <span class="status-chip" title="{mode_desc}">⚙️ {mode_desc}</span>
+          <span class="status-chip" title="{pipeline_desc}">⚙️ {pipeline_desc}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_unsupported_subject(subject: str) -> None:
+    """Hiển thị khi môn học chưa được hỗ trợ trong demo."""
+    st.markdown(
+        f"""
+        <div class="error-box">
+          <strong>ℹ️ Môn học hiện chưa được hỗ trợ</strong><br>
+          <small>
+            "{subject}" chưa có dữ liệu cho pipeline demo.
+            Vui lòng chọn một trong ba môn: Lịch sử Đảng, Pháp luật đại cương, Triết học Mác-Lênin.
+          </small>
         </div>
         """,
         unsafe_allow_html=True,

@@ -4,53 +4,16 @@ config.py — Cấu hình tập trung cho toàn bộ ứng dụng RAG.
 
 from __future__ import annotations
 
-# ── Pipeline modes ────────────────────────────────────────────────────────────
-# 3 chế độ pipeline, mỗi chế độ xác định toàn bộ cấu hình retrieval:
-#   Fast    : BM25 · No Rerank          → nhanh nhất
-#   Balance : BM25 · No Rerank          → cân bằng (top_k lớn hơn)
-#   Quality : Dense MMR · BGE Reranker  → chất lượng cao nhất
-PIPELINE_MODES: dict[str, dict] = {
-    "⚡ Fast": {
-        "key": "fast",
-        "embedding": "BGE-M3 (Local)",
-        "retriever_mode": "bm25",
-        "default_top_k": 3,
-        "use_rerank": False,
-        "reranker_model": None,
-        "desc": "Recursive-Char · BGE-M3 · BM25 · Không rerank",
-        "detail": "Tốc độ tối ưu — BM25 trả về 3 đoạn tốt nhất, không qua reranker.",
-    },
-    "⚖️ Balance": {
-        "key": "balance",
-        "embedding": "BGE-M3 (Local)",
-        "retriever_mode": "bm25",
-        "default_top_k": 5,
-        "use_rerank": False,
-        "reranker_model": None,
-        "desc": "Recursive-Char · BGE-M3 · BM25 · Không rerank",
-        "detail": "Cân bằng tốc độ & chất lượng — BM25 trả về 5 đoạn, không qua reranker.",
-    },
-    "🎯 Quality": {
-        "key": "quality",
-        "embedding": "BGE-M3 (Local)",
-        "retriever_mode": "dense_mmr",
-        "default_top_k": 5,
-        "use_rerank": True,
-        "reranker_model": "BAAI/bge-reranker-v2-m3",
-        "desc": "Recursive-Char · BGE-M3 · Dense MMR · BGE Reranker",
-        "detail": "Chất lượng cao nhất — Dense MMR lấy đoạn đa dạng, CrossEncoder reranker tinh chỉnh lại.",
-    },
-    # Chỉ dùng sau khi Chroma đã ingest lại bằng đúng model FT (cùng chunking recursive 512/64).
-    "🎯 Quality · VN Bi-Encoder (FT)": {
-        "key": "quality_vn_bi",
-        "embedding": "Vietnamese Bi-Encoder (FT)",
-        "retriever_mode": "dense_mmr",
-        "default_top_k": 5,
-        "use_rerank": True,
-        "reranker_model": "BAAI/bge-reranker-v2-m3",
-        "desc": "Recursive-Char · VN Bi-Encoder FT · Dense MMR · BGE Reranker",
-        "detail": "Giống Quality nhưng dense dùng embedding fine-tune — vector store phải build bằng cùng model.",
-    },
+# ── Demo pipeline (cố định) ───────────────────────────────────────────────────
+# Recursive 512/64 · VN Bi-Encoder V2 · Dense MMR · Gemini
+DEMO_PIPELINE: dict = {
+    "label": "VN Bi-Encoder V2 · Dense MMR",
+    "embedding": "Vietnamese Bi-Encoder (FT)",
+    "retriever_mode": "dense_mmr",
+    "default_top_k": 5,
+    "use_rerank": False,
+    "reranker_model": None,
+    "desc": "Recursive 512/64 · VN Bi-Encoder V2 · Dense MMR",
 }
 
 # ── Catalogue môn học ─────────────────────────────────────────────────────────
@@ -60,6 +23,7 @@ SUBJECT_CATALOGUE: dict[str, dict] = {
         "collection": "rag_lich_su_dang_e5_bm25",
         "chroma_dir_vn_bi_ft": "data/chroma_db_lich_su_dang_recursive_vn_bi_ft_bm25",
         "collection_vn_bi_ft": "rag_lich_su_dang_recursive_vn_bi_ft_bm25",
+        "supported": True,
         "icon": "🏛️",
         "color": "#e74c3c",
     },
@@ -68,6 +32,7 @@ SUBJECT_CATALOGUE: dict[str, dict] = {
         "collection": "rag_pldc_e5_bm25",
         "chroma_dir_vn_bi_ft": "data/chroma_db_phap_luat_recursive_vn_bi_ft_bm25",
         "collection_vn_bi_ft": "rag_phap_luat_recursive_vn_bi_ft_bm25",
+        "supported": True,
         "icon": "⚖️",
         "color": "#2980b9",
     },
@@ -76,6 +41,7 @@ SUBJECT_CATALOGUE: dict[str, dict] = {
         "collection": "rag_triet_hoc_e5_bm25",
         "chroma_dir_vn_bi_ft": "data/chroma_db_triet_hoc_recursive_vn_bi_ft_bm25",
         "collection_vn_bi_ft": "rag_triet_hoc_recursive_vn_bi_ft_bm25",
+        "supported": True,
         "icon": "🔬",
         "color": "#8e44ad",
     },
@@ -84,6 +50,7 @@ SUBJECT_CATALOGUE: dict[str, dict] = {
         "collection": "rag_kinh_te_chinh_tri_e5_bm25",
         "chroma_dir_vn_bi_ft": "data/chroma_db_kinh_te_recursive_vn_bi_ft_bm25",
         "collection_vn_bi_ft": "rag_kinh_te_recursive_vn_bi_ft_bm25",
+        "supported": False,
         "icon": "📊",
         "color": "#27ae60",
     },
@@ -92,6 +59,7 @@ SUBJECT_CATALOGUE: dict[str, dict] = {
         "collection": "rag_chu_nghia_xa_hoi_khoa_hoc_e5_bm25",
         "chroma_dir_vn_bi_ft": "data/chroma_db_cnxhkh_recursive_vn_bi_ft_bm25",
         "collection_vn_bi_ft": "rag_cnxhkh_recursive_vn_bi_ft_bm25",
+        "supported": False,
         "icon": "🌐",
         "color": "#e67e22",
     },
@@ -100,6 +68,7 @@ SUBJECT_CATALOGUE: dict[str, dict] = {
         "collection": "rag_tu_tuong_hcm_e5_bm25",
         "chroma_dir_vn_bi_ft": "data/chroma_db_tthcm_recursive_vn_bi_ft_bm25",
         "collection_vn_bi_ft": "rag_tthcm_recursive_vn_bi_ft_bm25",
+        "supported": False,
         "icon": "⭐",
         "color": "#f39c12",
     },
@@ -163,6 +132,5 @@ LOG_BACKUP_COUNT = 3
 
 # ── Pipeline description ──────────────────────────────────────────────────────
 PIPELINE_DESC = (
-    "PDF → Recursive-Char Chunking → BGE-M3 Embed → BM25 / Dense MMR Retrieval "
-    "→ (BGE Reranker nếu Quality) → GPT-4o-mini"
+    "PDF → Recursive 512/64 → VN Bi-Encoder V2 → Dense MMR → Gemini"
 )

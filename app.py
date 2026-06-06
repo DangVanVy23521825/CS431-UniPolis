@@ -21,8 +21,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from config import (
+    DEMO_PIPELINE,
     PIPELINE_DESC,
-    PIPELINE_MODES,
     PRESET_QUESTIONS,
     SUBJECT_CATALOGUE,
 )
@@ -36,6 +36,7 @@ from ui_components import (
     render_skeleton,
     render_stats_row,
     render_status_bar,
+    render_unsupported_subject,
     sidebar_section_label,
 )
 from utils import (
@@ -75,19 +76,15 @@ def _init_session_state() -> None:
             st.session_state[k] = v
 
 
-def _detect_config_change(subject, pipeline_mode, top_k) -> bool:
-    cur = {"subject": subject, "pipeline_mode": pipeline_mode, "top_k": top_k}
+def _detect_config_change(subject, top_k) -> bool:
+    cur = {"subject": subject, "top_k": top_k}
     changed = st.session_state.last_config and st.session_state.last_config != cur
     st.session_state.last_config = cur
     return changed
 
 
-def _resolve_subject_store(subject_cfg: dict, pipeline_mode_key: str) -> tuple[str, str]:
-    """Use the vector store built with the same embedding model as the selected mode."""
-    mode_key = PIPELINE_MODES[pipeline_mode_key].get("key")
-    if mode_key == "quality_vn_bi":
-        return subject_cfg["chroma_dir_vn_bi_ft"], subject_cfg["collection_vn_bi_ft"]
-    return subject_cfg["chroma_dir"], subject_cfg["collection"]
+def _resolve_subject_store(subject_cfg: dict) -> tuple[str, str]:
+    return subject_cfg["chroma_dir_vn_bi_ft"], subject_cfg["collection_vn_bi_ft"]
 
 
 def _clear_history():
@@ -97,19 +94,18 @@ def _clear_history():
 
 # ── Engine loader ──────────────────────────────────────────────────────────────
 @st.cache_resource(show_spinner="⏳ Đang tải mô hình và vector store…")
-def load_engine(chroma_dir, collection, pipeline_mode_key, top_k):
-    """Tải HistoryRAG theo pipeline mode đã chọn."""
-    mode_cfg = PIPELINE_MODES[pipeline_mode_key]
+def load_engine(chroma_dir, collection, top_k):
+    """Tải HistoryRAG theo pipeline demo cố định."""
     try:
         HistoryRAG = _import_rag_engine()
         return HistoryRAG(
             chroma_dir=chroma_dir,
             collection_name=collection,
-            embedding_model_key=mode_cfg["embedding"],
+            embedding_model_key=DEMO_PIPELINE["embedding"],
             rerank_top_k=top_k,
-            retriever_mode=mode_cfg["retriever_mode"],
-            use_rerank=mode_cfg["use_rerank"],
-            reranker_model=mode_cfg.get("reranker_model"),
+            retriever_mode=DEMO_PIPELINE["retriever_mode"],
+            use_rerank=DEMO_PIPELINE["use_rerank"],
+            reranker_model=DEMO_PIPELINE.get("reranker_model"),
         ), None
     except FileNotFoundError as e:
         return None, f"BM25 index không tìm thấy: {e}"
@@ -158,7 +154,7 @@ def _render_hero(subject: str, cfg: dict) -> None:
         <div class="rag-hero">
           <div>
             <h1>{icon} RAG Giáo trình Lý luận Chính trị</h1>
-            <p class="subtitle">Trợ lý hỏi đáp thông minh · BM25 RAG (No-rerank) · GPT-4o-mini</p>
+            <p class="subtitle">VN Bi-Encoder V2 · Dense MMR · Gemini</p>
           </div>
         </div>
         """,
@@ -178,19 +174,11 @@ def _render_sidebar():
             label_visibility="collapsed",
         )
 
-        sidebar_section_label("Pipeline Mode")
-        pipeline_mode = st.selectbox(
-            "Pipeline Mode",
-            list(PIPELINE_MODES.keys()),
-            index=1,  # mặc định: ⚖️ Balance
-            label_visibility="collapsed",
-        )
-        # Hiển thị mô tả chi tiết của mode đang chọn
-        st.caption(PIPELINE_MODES[pipeline_mode]["detail"])
+        sidebar_section_label("Pipeline")
+        st.caption(DEMO_PIPELINE["desc"])
 
         sidebar_section_label("Tham số truy xuất")
-        default_top_k = PIPELINE_MODES[pipeline_mode]["default_top_k"]
-        top_k = st.slider("Top-K", 1, 10, default_top_k, 1)
+        top_k = st.slider("Top-K", 1, 10, DEMO_PIPELINE["default_top_k"], 1)
 
         st.divider()
         sidebar_section_label("Chat actions")
@@ -202,7 +190,9 @@ def _render_sidebar():
 
         if st.session_state.get("messages"):
             sidebar_section_label("Export")
-            md = export_conversation_markdown(st.session_state.messages, subject, pipeline_mode)
+            md = export_conversation_markdown(
+                st.session_state.messages, subject, DEMO_PIPELINE["label"]
+            )
             txt = export_conversation_txt(st.session_state.messages)
             render_export_buttons(md, txt)
 
@@ -224,21 +214,27 @@ def _render_sidebar():
             else:
                 st.toast("Chưa có câu hỏi nào để tái tạo", icon="⚠️")
 
-    return subject, pipeline_mode, top_k
+    return subject, top_k
 
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main() -> None:
     _init_session_state()
 
-    subject, pipeline_mode, top_k = _render_sidebar()
+    subject, top_k = _render_sidebar()
     subject_cfg = SUBJECT_CATALOGUE[subject]
-    chroma_dir, collection = _resolve_subject_store(subject_cfg, pipeline_mode)
+    pipeline_label = DEMO_PIPELINE["label"]
 
-    if _detect_config_change(subject, pipeline_mode, top_k):
-        st.toast(f"⚙️ Đã đổi cấu hình: {subject} · {pipeline_mode}", icon="🔄")
+    if _detect_config_change(subject, top_k):
+        st.toast(f"⚙️ Đã đổi cấu hình: {subject}", icon="🔄")
 
     _render_hero(subject, subject_cfg)
+
+    if not subject_cfg.get("supported", False):
+        render_unsupported_subject(subject)
+        st.stop()
+
+    chroma_dir, collection = _resolve_subject_store(subject_cfg)
 
     # DB check
     db_path = Path(chroma_dir)
@@ -246,8 +242,7 @@ def main() -> None:
         render_db_missing_error(subject, chroma_dir)
         st.stop()
 
-    # Engine — cache key gồm cả pipeline_mode để tự reload khi đổi mode
-    engine, engine_error = load_engine(chroma_dir, collection, pipeline_mode, top_k)
+    engine, engine_error = load_engine(chroma_dir, collection, top_k)
     if engine_error or engine is None:
         render_engine_error(Exception(engine_error or "Unknown"), context="tải engine")
         st.stop()
@@ -260,7 +255,7 @@ def main() -> None:
 
     # ── Tab Chat ─────────────────────────────────────────────────────────────
     with tab_chat:
-        render_status_bar(subject, pipeline_mode, top_k)
+        render_status_bar(subject, top_k)
 
         if st.session_state.regenerating:
             st.info("🔄 Đang tái tạo câu trả lời…")
@@ -276,7 +271,7 @@ def main() -> None:
 
     # ── Tab Exam ──────────────────────────────────────────────────────────────
     with tab_exam:
-        render_exam_tab(engine, subject, pipeline_mode)
+        render_exam_tab(engine, subject, pipeline_label)
 
     # ── Process chat input (outside tabs) ─────────────────────────────────────
     question: Optional[str] = user_input or st.session_state.pending_question
@@ -303,7 +298,7 @@ def main() -> None:
                 render_skeleton()
             try:
                 answer, sources, elapsed = _run_ask(engine, question)
-                log_query(subject, pipeline_mode, question, elapsed, len(sources))
+                log_query(subject, pipeline_label, question, elapsed, len(sources))
             except Exception as exc:
                 skeleton_ph.empty()
                 log_error("engine.ask", exc)
@@ -312,12 +307,12 @@ def main() -> None:
 
             skeleton_ph.empty()
             st.markdown(answer)
-            render_stats_row(elapsed, sources, subject, pipeline_mode)
+            render_stats_row(elapsed, sources, subject, pipeline_label)
             render_evidence(sources, subject)
 
     st.session_state.messages.append({
         "role": "assistant", "content": answer,
-        "sources": sources, "elapsed": elapsed, "model": pipeline_mode,
+        "sources": sources, "elapsed": elapsed, "model": pipeline_label,
     })
 
 
