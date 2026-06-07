@@ -41,7 +41,7 @@ cs431/
 ├── data/
 │   ├── *.pdf                 # 6 giáo trình
 │   └── training_data/        # qa_audit.jsonl (3 môn)
-├── models/                   # Metadata model (weights tải riêng)
+├── models/                   # Metadata huấn luyện (weights trên Hugging Face)
 ├── artifacts/                # Kết quả MRR, RAGAS
 ├── docs/                     # Đặc tả & báo cáo
 └── demo/                     # ← Teammate push ứng dụng demo vào đây
@@ -66,18 +66,30 @@ cd CS431-UniPolis
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # nếu chạy RAGAS
+cp .env.example .env
 ```
 
-### Tải model V2
+### Model V2 (Hugging Face)
 
-Weights (~517 MB) không có trong Git — tải từ Kaggle [`dangvy1507/models`](https://www.kaggle.com/datasets/dangvy1507/models):
+Weights (~517 MB) **không** nằm trong Git. Model V2 được host trên Hugging Face — chỉ cần gắn biến môi trường; lần chạy đầu sẽ tự tải về cache (`~/.cache/huggingface/hub/`).
 
-```text
-models/bi_encoder_hnm_v2/vietnamese-bi-encoder-v2-hnm/
+1. Copy `.env.example` → `.env` (nếu chưa có)
+2. Thêm vào `.env`:
+
+```bash
+# Repo public — không cần login Hugging Face
+UNIPOLIS_VI_BI_ENCODER_PATH=HoangNgo1026/vietnamese-bi-encoder-v2-hnm
 ```
 
-Chi tiết: [models/README.md](models/README.md)
+3. (Tuỳ chọn) Nếu chạy demo / RAGAS cần Gemini:
+
+```bash
+GOOGLE_API_KEY=your_google_api_key_here
+```
+
+Repo **private** hoặc **gated** → thêm `HF_TOKEN=hf_...` hoặc chạy `hf auth login`.
+
+Model card: [HoangNgo1026/vietnamese-bi-encoder-v2-hnm](https://huggingface.co/HoangNgo1026/vietnamese-bi-encoder-v2-hnm) · Chi tiết metadata: [models/README.md](models/README.md)
 
 ---
 
@@ -140,7 +152,7 @@ Kết quả: `artifacts/ragas_retriever_comparison_pldc_30_retry/ragas_summary_f
 
 Để tích hợp model V2 vào demo:
 
-1. Tải weights → [models/README.md](models/README.md)
+1. Set `UNIPOLIS_VI_BI_ENCODER_PATH` trong `.env` (xem [Bắt đầu](#model-v2-hugging-face))
 2. Ingest Chroma/BM25 bằng **cùng model V2** và chunking thống nhất
 3. Chọn pipeline dense dùng `Vietnamese Bi-Encoder (FT)`
 
@@ -159,7 +171,7 @@ Kết quả: `artifacts/ragas_retriever_comparison_pldc_30_retry/ragas_summary_f
 ## FAQ
 
 **Repo có chứa model weights không?**  
-Không. Tải từ Kaggle `dangvy1507/models` (~517 MB).
+Không. Set `UNIPOLIS_VI_BI_ENCODER_PATH=HoangNgo1026/vietnamese-bi-encoder-v2-hnm` trong `.env` — model tự tải từ Hugging Face (~517 MB, cần Internet lần đầu).
 
 **Chunking lúc fine-tune khác lúc demo thì sao?**  
 Model vẫn chạy nhưng retrieval có thể kém do distribution shift. Nên đồng bộ chunk giữa sinh data → fine-tune → ingest demo.
@@ -171,9 +183,10 @@ Fine-tune, benchmark, RAGAS → repo này. Demo UI → teammate (thư mục `dem
 
 ## Tài nguyên
 
-- [Vietnamese Bi-Encoder](https://huggingface.co/bkai-foundation-models/vietnamese-bi-encoder)
+- [Vietnamese Bi-Encoder (base)](https://huggingface.co/bkai-foundation-models/vietnamese-bi-encoder)
+- [**V2 hard negative (UniPolis)**](https://huggingface.co/HoangNgo1026/vietnamese-bi-encoder-v2-hnm)
 - [RAGAS](https://docs.ragas.io/) · [Sentence Transformers](https://www.sbert.net/)
-- Kaggle: `dangvy1507/training-data`, `dangvy1507/models`
+- Kaggle (training data): `dangvy1507/training-data`
 
 ---
 
